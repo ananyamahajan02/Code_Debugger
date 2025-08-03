@@ -21,15 +21,23 @@ def debug_and_fix(code: str, suggest_fix: bool):
     except Exception as e:
         return f"❌ Unexpected error:\n{str(e)}", ""
 
-with gr.Blocks(theme=Ocean()) as demo:
-    gr.Markdown(
-        """
-        <h1 style='text-align: center; color: #4EA8DE;'>🛠️ Python Code Debugger</h1>
-        <p style='text-align: center; font-size: 16px;'>Paste your Python code below. Get error feedback and optionally a suggested fix!</p>
-        """
-    )
+# Add CSS to center and limit max-width of the content
+custom_css = """
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+"""
 
-    with gr.Column():
+with gr.Blocks(theme=Ocean(), css=custom_css) as demo:
+    with gr.Column(elem_classes=["container"]):
+        gr.Markdown(
+            """
+            <h1 style='text-align: center; color: #4EA8DE;'>🛠️ Python Code Debugger</h1>
+            <p style='text-align: center; font-size: 16px;'>Paste your Python code below. Get error feedback and optionally a suggested fix!</p>
+            """
+        )
+
         code_input = gr.Textbox(
             lines=12,
             label="👩‍💻 Python Code Input",
@@ -44,25 +52,23 @@ with gr.Blocks(theme=Ocean()) as demo:
 
         run_button = gr.Button("🚀 Run Debugger")
 
-    # Grouped Output Area
-    with gr.Group():
+        with gr.Group():
+            with gr.Row():
+                debug_output = gr.Textbox(
+                    lines=10,
+                    label="🐞 Debugging Result",
+                    interactive=False,
+                    show_copy_button=True,
+                    placeholder="This section shows error analysis..."
+                )
 
-        with gr.Row():
-            debug_output = gr.Textbox(
-                lines=10,
-                label="🐞 Debugging Result",
-                interactive=False,
-                show_copy_button=True,
-                placeholder="This section shows error analysis..."
-            )
-
-            fix_output = gr.Textbox(
-                lines=10,
-                label="🛠 Suggested Fix",
-                interactive=False,
-                show_copy_button=True,
-                placeholder="The suggested fixed code will appear here..."
-            )
+                fix_output = gr.Textbox(
+                    lines=10,
+                    label="🛠 Suggested Fix",
+                    interactive=False,
+                    show_copy_button=True,
+                    placeholder="The suggested fixed code will appear here..."
+                )
 
     run_button.click(
         fn=debug_and_fix,
@@ -72,3 +78,4 @@ with gr.Blocks(theme=Ocean()) as demo:
 
 if __name__ == "__main__":
     demo.launch()
+
