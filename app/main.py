@@ -29,5 +29,5 @@ def main():
     else:
         print("\n✅ No fix requested.")
 
-if __name__ == "__main__":  # ✅ Fixed
+if __name__ == "__main__":  
     main()
