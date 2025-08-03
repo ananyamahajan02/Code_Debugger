@@ -1,0 +1,4 @@
+openai
+openai-agent
+python-dotenv
+agent
